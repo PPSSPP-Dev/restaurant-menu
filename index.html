@@ -1,14 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CLASSIC RESTAURANT </title>
- <link rel="stylesheet" href="style.css">
+  <title>CLASSIC RESTAURANT</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<button onclick="filterCategory('all', this)">All</button>
-<button onclick="filterCategory('meals', this)">Meals</button>
-<button onclick="filterCategory('drinks', this)">Drinks</button>
-
-  <script src="Menu.js"></script>
 <body>
 
   <h1>Food Menu</h1>
@@ -18,9 +13,9 @@
 
   <!-- Category Filter Buttons -->
   <div class="filter-buttons">
-    <button onclick="filterCategory('all')">All</button>
-    <button onclick="filterCategory('meals')">Meals</button>
-    <button onclick="filterCategory('drinks')">Drinks</button>
+    <button onclick="filterCategory('all', this)">All</button>
+    <button onclick="filterCategory('meals', this)">Meals</button>
+    <button onclick="filterCategory('drinks', this)">Drinks</button>
   </div>
 
   <!-- Item Counter Line -->
@@ -44,6 +39,8 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- Place script right here at the bottom of body -->
+  <script src="Menu.js"></script>
+
 </body>
 </html>
