@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CLASSIC RESTAURANT</title>
+  <link rel="stylesheet" href="Menu.css">
+</head>
+<script src="Menu.js"></script>
+<body>
+
+  <h1>Food Menu</h1>
+
+  <!-- Search Bar -->
+  <input type="text" id="searchInput" placeholder="Search menu..." onkeyup="filterMenu()">
+
+  <!-- Category Filter Buttons -->
+  <div class="filter-buttons">
+    <button onclick="filterCategory('all')">All</button>
+    <button onclick="filterCategory('meals')">Meals</button>
+    <button onclick="filterCategory('drinks')">Drinks</button>
+  </div>
+
+  <!-- Item Counter Line -->
+  <p id="itemCount">Showing 3 items</p>
+
+  <!-- Menu Cards -->
+  <div class="menu-container">
+    <div class="menu-item" data-name="jollof rice" data-category="meals">
+      <h3>Jollof Rice</h3>
+      <p class="price">&#8373; 30</p>
+    </div>
+
+    <div class="menu-item" data-name="fried plantain" data-category="meals">
+      <h3>Fried Plantain</h3>
+      <p class="price">&#8373; 15</p>
+    </div>
+
+    <div class="menu-item" data-name="coca cola" data-category="drinks">
+      <h3>Coca Cola</h3>
+      <p class="price">&#8373; 10</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
