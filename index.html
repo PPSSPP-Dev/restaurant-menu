@@ -1,46 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>CLASSIC RESTAURANT</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tasty Bites | Online Menu</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f4f4f9; padding: 15px; padding-bottom: 100px; }
+    
+    header { text-align: center; margin-bottom: 20px; }
+    h1 { color: #d9534f; font-size: 24px; }
+    p.subtitle { color: #666; font-size: 14px; }
+
+    .demo-banner {
+      background: #ffeb3b; color: #333; text-align: center;
+      padding: 8px; font-size: 12px; font-weight: bold;
+      border-radius: 5px; margin-bottom: 15px;
+    }
+
+    .menu-container { display: flex; flex-direction: column; gap: 15px; }
+
+    .card {
+      background: white; border-radius: 10px; padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .item-info h3 { font-size: 16px; color: #333; }
+    .item-info p { font-size: 14px; color: #d9534f; font-weight: bold; margin-top: 5px; }
+
+    .add-btn {
+      background: #27ae60; color: white; border: none;
+      padding: 8px 12px; border-radius: 5px; font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* Fixed Cart Floating at Bottom */
+    .cart-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: #2c3e50; color: white; padding: 15px;
+      display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    }
+
+    .checkout-btn {
+      background: #25D366; color: white; border: none;
+      padding: 10px 15px; border-radius: 5px; font-weight: bold;
+      cursor: pointer; text-decoration: none; font-size: 14px;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Food Menu</h1>
-
-  <!-- Search Bar -->
-  <input type="text" id="searchInput" placeholder="Search menu..." onkeyup="filterMenu()">
-
-  <!-- Category Filter Buttons -->
-  <div class="filter-buttons">
-    <button onclick="filterCategory('all', this)">All</button>
-    <button onclick="filterCategory('meals', this)">Meals</button>
-    <button onclick="filterCategory('drinks', this)">Drinks</button>
+  <div class="demo-banner">
+    DEMO SITE: Orders placed here are for testing only!
   </div>
 
-  <!-- Item Counter Line -->
-  <p id="itemCount">Showing 3 items</p>
+  <header>
+    <h1>Tasty Bites Restaurant</h1>
+    <p class="subtitle">Select items to place your WhatsApp order</p>
+  </header>
 
-  <!-- Menu Cards -->
   <div class="menu-container">
-    <div class="menu-item" data-name="jollof rice" data-category="meals">
-      <h3>Jollof Rice</h3>
-      <p class="price">&#8373; 30</p>
+    <!-- Menu Item 1 -->
+    <div class="card">
+      <div class="item-info">
+        <h3>Jollof Rice & Chicken</h3>
+        <p>GH₵ 35.00</p>
+      </div>
+      <button class="add-btn" onclick="addToCart('Jollof Rice & Chicken', 35)">+ Add</button>
     </div>
 
-    <div class="menu-item" data-name="fried plantain" data-category="meals">
-      <h3>Fried Plantain</h3>
-      <p class="price">&#8373; 15</p>
+    <!-- Menu Item 2 -->
+    <div class="card">
+      <div class="item-info">
+        <h3>Fried Rice & Fish</h3>
+        <p>GH₵ 40.00</p>
+      </div>
+      <button class="add-btn" onclick="addToCart('Fried Rice & Fish', 40)">+ Add</button>
     </div>
 
-    <div class="menu-item" data-name="coca cola" data-category="drinks">
-      <h3>Coca Cola</h3>
-      <p class="price">&#8373; 10</p>
+    <!-- Menu Item 3 -->
+    <div class="card">
+      <div class="item-info">
+        <h3>Chilled Bottled Drink</h3>
+        <p>GH₵ 10.00</p>
+      </div>
+      <button class="add-btn" onclick="addToCart('Bottled Drink', 10)">+ Add</button>
     </div>
   </div>
 
-  <!-- Place script right here at the bottom of body -->
-  <script src="Menu.js"></script>
+  <!-- Bottom Floating Cart -->
+  <div class="cart-bar">
+    <div>
+      <span id="cart-count">0</span> items | 
+      <strong>Total: GH₵ <span id="cart-total">0</span></strong>
+    </div>
+    <button class="checkout-btn" onclick="sendWhatsAppOrder()">Order on WhatsApp</button>
+  </div>
+
+  <script>
+    let cart = [];
+    let total = 0;
+
+    // Replace this with your own WhatsApp number (format: 233XXXXXXXXX)
+    const ownerPhoneNumber = "233540572557"; 
+
+    function addToCart(itemName, price) {
+      cart.push({ name: itemName, price: price });
+      total += price;
+
+      // Update Screen
+      document.getElementById("cart-count").innerText = cart.length;
+      document.getElementById("cart-total").innerText = total;
+    }
+
+    function sendWhatsAppOrder() {
+      if (cart.length === 0) {
+        alert("Your cart is empty! Add an item first.");
+        return;
+      }
+
+      // Build item list string
+      let itemList = "";
+      cart.forEach((item, index) => {
+        itemList += `${index + 1}. ${item.name} - GH₵${item.price}\n`;
+      });
+
+      // Format WhatsApp Message
+      let message = `Hello Tasty Bites! I would like to place an order:\n\n${itemList}\n*Total:* GH₵${total}\n\n*Delivery Location:* [Type Location Here]`;
+
+      // Open WhatsApp link
+      let whatsappURL = `https://wa.me/${ownerPhoneNumber}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappURL, '_blank');
+    }
+  </script>
 
 </body>
 </html>
