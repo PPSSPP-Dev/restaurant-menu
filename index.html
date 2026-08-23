@@ -56,6 +56,13 @@
       padding: 10px 15px; border-radius: 5px; font-weight: bold;
       cursor: pointer; text-decoration: none; font-size: 14px;
     }
+    .card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
   </style>
 </head>
 <body>
@@ -87,6 +94,26 @@
         <h3>Fried Rice & Fish</h3>
         <p>GH₵ 40.00</p>
       </div>
+      <!-- Menu Item 1 -->
+<div class="card">
+  <img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80" alt="Jollof Rice" class="card-img">
+  <div class="item-info">
+    <h3>Jollof Rice & Chicken</h3>
+    <p>GH₵ 35.00</p>
+  </div>
+  <button class="add-btn" onclick="addToCart('Jollof Rice & Chicken', 35)">Add to Order</button>
+</div>
+
+<!-- Menu Item 2 -->
+<div class="card">
+  <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=80" alt="Fried Rice" class="card-img">
+  <div class="item-info">
+    <h3>Fried Rice & Fish</h3>
+    <p>GH₵ 40.00</p>
+  </div>
+  <button class="add-btn" onclick="addToCart('Fried Rice & Fish', 40)">Add to Order</button>
+</div>
+
       <button class="add-btn" onclick="addToCart('Fried Rice & Fish', 40)">+ Add</button>
     </div>
 
