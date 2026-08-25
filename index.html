@@ -106,18 +106,54 @@
       font-size: 16px;
     }
 
+    /* Quantity Controls */
+    .card-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px 15px 15px;
+      gap: 10px;
+    }
+
+    .qty-picker {
+      display: flex;
+      align-items: center;
+      background: #f0f0f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      background: #e0e0e0;
+      border: none;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+    }
+
+    .qty-val {
+      width: 32px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
     .add-btn {
-      margin: 12px 15px 15px 15px;
-      padding: 12px;
+      flex: 1;
+      padding: 10px;
       background-color: #27ae60;
       color: white;
       border: none;
       border-radius: 8px;
       font-weight: bold;
-      font-size: 15px;
+      font-size: 14px;
       cursor: pointer;
     }
 
+    /* Floating Cart Bar */
     .cart-bar {
       position: fixed;
       bottom: 0;
@@ -189,7 +225,14 @@
         <h3>Jollof Rice & Chicken</h3>
         <p>GH₵ 35.00</p>
       </div>
-      <button class="add-btn" onclick="addToCart('Jollof Rice & Chicken', 35)">+ Add to Order</button>
+      <div class="card-controls">
+        <div class="qty-picker">
+          <button class="qty-btn" onclick="changeQty('qty-1', -1)">-</button>
+          <span id="qty-1" class="qty-val">1</span>
+          <button class="qty-btn" onclick="changeQty('qty-1', 1)">+</button>
+        </div>
+        <button class="add-btn" onclick="addToCart('Jollof Rice & Chicken', 35, 'qty-1')">+ Add to Order</button>
+      </div>
     </div>
 
     <!-- Item 2 -->
@@ -199,7 +242,14 @@
         <h3>Fried Rice & Fish</h3>
         <p>GH₵ 40.00</p>
       </div>
-      <button class="add-btn" onclick="addToCart('Fried Rice & Fish', 40)">+ Add to Order</button>
+      <div class="card-controls">
+        <div class="qty-picker">
+          <button class="qty-btn" onclick="changeQty('qty-2', -1)">-</button>
+          <span id="qty-2" class="qty-val">1</span>
+          <button class="qty-btn" onclick="changeQty('qty-2', 1)">+</button>
+        </div>
+        <button class="add-btn" onclick="addToCart('Fried Rice & Fish', 40, 'qty-2')">+ Add to Order</button>
+      </div>
     </div>
 
     <!-- Item 3 -->
@@ -209,7 +259,14 @@
         <h3>Chilled Bottled Drink</h3>
         <p>GH₵ 10.00</p>
       </div>
-      <button class="add-btn" onclick="addToCart('Chilled Bottled Drink', 10)">+ Add to Order</button>
+      <div class="card-controls">
+        <div class="qty-picker">
+          <button class="qty-btn" onclick="changeQty('qty-3', -1)">-</button>
+          <span id="qty-3" class="qty-val">1</span>
+          <button class="qty-btn" onclick="changeQty('qty-3', 1)">+</button>
+        </div>
+        <button class="add-btn" onclick="addToCart('Chilled Bottled Drink', 10, 'qty-3')">+ Add to Order</button>
+      </div>
     </div>
   </div>
 
@@ -226,8 +283,30 @@
   <script>
     let cart = [];
 
-    function addToCart(itemName, price) {
-      cart.push({ name: itemName, price: price });
+    function changeQty(elementId, amount) {
+      let qtyElement = document.getElementById(elementId);
+      let currentQty = parseInt(qtyElement.innerText);
+      let newQty = currentQty + amount;
+      
+      if (newQty >= 1) {
+        qtyElement.innerText = newQty;
+      }
+    }
+
+    function addToCart(itemName, price, qtyElementId) {
+      let qty = parseInt(document.getElementById(qtyElementId).innerText);
+
+      // Check if item already exists in cart
+      let existingItem = cart.find(item => item.name === itemName);
+
+      if (existingItem) {
+        existingItem.qty += qty;
+      } else {
+        cart.push({ name: itemName, price: price, qty: qty });
+      }
+
+      // Reset picker back to 1
+      document.getElementById(qtyElementId).innerText = 1;
       updateCartUI();
     }
 
@@ -237,21 +316,18 @@
     }
 
     function updateCartUI() {
-      document.getElementById('cart-count').innerText = cart.length + " items";
-      
-      let total = cart.reduce((sum, item) => sum + item.price, 0);
-      document.getElementById('cart-total').innerText = total;
+      let totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      let totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+      document.getElementById('cart-count').innerText = totalItems + " items";
+      document.getElementById('cart-total').innerText = totalPrice;
     }
 
     function filterMenu(category, button) {
-      // Remove active class from all buttons
       let buttons = document.querySelectorAll('.filter-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
-      
-      // Add active class to clicked button
       button.classList.add('active');
 
-      // Show/hide cards based on category
       let cards = document.querySelectorAll('.card');
       cards.forEach(card => {
         if (category === 'all' || card.classList.contains(category)) {
@@ -269,14 +345,15 @@
       }
 
       let message = "Hello! I'd like to place an order:%0A";
-      let total = 0;
+      let grandTotal = 0;
 
       cart.forEach(item => {
-        message += `%0A• ${item.name} - GH₵ ${item.price}`;
-        total += item.price;
+        let itemTotal = item.price * item.qty;
+        message += `%0A• ${item.qty}x ${item.name} - GH₵ ${itemTotal}`;
+        grandTotal += itemTotal;
       });
 
-      message += `%0A%0ATotal: GH₵ ${total}`;
+      message += `%0A%0ATotal: GH₵ ${grandTotal}`;
       
       let phoneNumber = "233000000000"; // Replace with real phone number
       window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
