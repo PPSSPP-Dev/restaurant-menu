@@ -25,7 +25,7 @@
 
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .header h1 {
@@ -42,6 +42,30 @@
     .header a {
       color: #888;
       font-size: 12px;
+    }
+
+    /* Category Filter Buttons */
+    .filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      background-color: white;
+      border-radius: 20px;
+      font-weight: bold;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background-color: #e74c3c;
+      color: white;
+      border-color: #e74c3c;
     }
 
     .menu-container {
@@ -150,9 +174,16 @@
     <a href="admin.html">Go to Admin View</a>
   </div>
 
+  <!-- Category Filters -->
+  <div class="filter-container">
+    <button class="filter-btn active" onclick="filterMenu('all', this)">All</button>
+    <button class="filter-btn" onclick="filterMenu('meals', this)">Meals</button>
+    <button class="filter-btn" onclick="filterMenu('drinks', this)">Drinks</button>
+  </div>
+
   <div class="menu-container">
     <!-- Item 1 -->
-    <div class="card">
+    <div class="card meals">
       <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80" alt="Jollof Rice" class="card-img">
       <div class="item-info">
         <h3>Jollof Rice & Chicken</h3>
@@ -162,7 +193,7 @@
     </div>
 
     <!-- Item 2 -->
-    <div class="card">
+    <div class="card meals">
       <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=80" alt="Fried Rice" class="card-img">
       <div class="item-info">
         <h3>Fried Rice & Fish</h3>
@@ -172,7 +203,7 @@
     </div>
 
     <!-- Item 3 -->
-    <div class="card">
+    <div class="card drinks">
       <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" alt="Drink" class="card-img">
       <div class="item-info">
         <h3>Chilled Bottled Drink</h3>
@@ -210,6 +241,25 @@
       
       let total = cart.reduce((sum, item) => sum + item.price, 0);
       document.getElementById('cart-total').innerText = total;
+    }
+
+    function filterMenu(category, button) {
+      // Remove active class from all buttons
+      let buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class to clicked button
+      button.classList.add('active');
+
+      // Show/hide cards based on category
+      let cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (category === 'all' || card.classList.contains(category)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
     }
 
     function sendWhatsApp() {
